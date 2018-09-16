@@ -40,3 +40,8 @@ julia> Knum.fixed_point(h,0.,10)
 10      0.543861823031617 
 ```
 
+# Acknowledgement
+
+This project is using ForwardDiff.jl.
+
+You can read their paper [Forward-Mode Automatic Differentiation in Julia on arXiv](https://arxiv.org/abs/1607.07892), or [Github Link](https://github.com/JuliaDiff/ForwardDiff.jl)
