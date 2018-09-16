@@ -1,0 +1,6 @@
+authors = ["AsahiK <klaus271@outlook.com>"]
+name = "Knum"
+uuid = "eb06dfb0-ba01-11e8-0a2b-3fa1859ea30c"
+version = "0.1.0"
+
+[deps]
