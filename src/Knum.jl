@@ -24,6 +24,11 @@ end
 
 function newton(equa, p, N = 20, tol = 1e-7, show = false)
     '''
+    ---NOTICE---
+    For Newton\'s method, your function need to enable 2 inputs,
+    one with Float64, the other one with Vector.
+
+
     Input:
     equa: The function you are going to compute
     p:    First point
@@ -98,7 +103,6 @@ function fpst(equa,p0,p1,N, tol = 1e-7, show = false)
         if show:
             println(i-1,'\t',p1)
         end
-        # compute derivative
         dfp = equa(p1) * (p1 - p0) / (equa(p1) - equa(p0))
         if abs(dfp) < tol
             if show
