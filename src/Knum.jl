@@ -190,6 +190,4 @@ function Steffensens(g, p0, n=10, tol=1e-7)
     return p
 end
 
-
-
 end # module

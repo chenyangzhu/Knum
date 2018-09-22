@@ -10,10 +10,13 @@ Pkg > add https://github.com/Klaus271/Knum/src/Knum.jl
 
 Available Algorithm
 
+- Bisection
 - Fixed Point
 - Newton's Method
 - Secant
 - False Position
+- Steffensen's Method
+- Aitken's Delta Method
 
 # How to use it
 
@@ -25,7 +28,7 @@ h (generic function with 1 method)
 
 julia> h(x) = 3^(-x)
 h (generic function with 2 methods)
-               
+
 julia> Knum.fixed_point(h,0.,10)
 0       0.0
 1       1.0
@@ -37,7 +40,7 @@ julia> Knum.fixed_point(h,0.,10)
 7       0.5660536061282596
 8       0.5369375702563746
 9       0.5543903636000769
-10      0.543861823031617 
+10      0.543861823031617
 ```
 
 # Acknowledgement
