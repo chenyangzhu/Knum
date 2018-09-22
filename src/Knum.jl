@@ -64,7 +64,7 @@ function newton(equa, p, N = 20, tol = 1e-7, show = false)
         println(i-1,'\t',p)
         dfp = ForwardDiff.gradient(equa,[p])[1]
         if abs(equa(p)/dfp) < tol
-            if show:
+            if show
                 println(i,'\t', p - equa(p)/dfp)
             end
             return p - equa(p)/dfp
@@ -88,11 +88,11 @@ function secant(equa,p0,p1,N=20, tol = 1e-7 , show = false)
     Approximation
 
     =#
-    if show:
+    if show
         println(0,'\t',p0)
     end
     for i in 1:N-1
-        if show:
+        if show
             println(i,'\t',p1)
         end
         if abs(p1-p0) < tol
@@ -102,7 +102,7 @@ function secant(equa,p0,p1,N=20, tol = 1e-7 , show = false)
         p1 = p1 - (equa(p1)*(p1-p0))/(equa(p1)-equa(p0))
         p0 = dumy
     end
-    if show:
+    if show
         println(N,'\t',p1)
     end
     return p1
@@ -121,7 +121,7 @@ function fpst(equa,p0,p1,N, tol = 1e-7, show = false)
     Approximation
     =#
     for i in 1:N+1
-        if show:
+        if show
             println(i-1,'\t',p1)
         end
         dfp = equa(p1) * (p1 - p0) / (equa(p1) - equa(p0))
@@ -187,6 +187,63 @@ function Steffensens(g, p0, n=10, tol=1e-7)
         p0 = p
     end
     println("Method Failed After", n, "iterations, the result is returned.")
+    return p
+end
+
+function Muller(f, p0,p1,p2,n,tol)
+    #=
+    Input:
+    p0,p1,p2 - Initial three guesses
+    n - max # of iterations
+    tol - tolerance
+
+    Output:
+    Roots
+    =#
+    
+    # First make every input Complex
+    p0 = Complex(p0)
+    p1 = Complex(p1)
+    p2 = Complex(p2)
+
+    h1 = p1 - p0
+    h2 = p2 - p1
+    delta1 = (f(p1) - f(p0))/h1
+    delta2 = (f(p2) - f(p1))/h2
+    d = (delta2 - delta1)/(h1 + h2)
+
+    # Create some temps
+    b = Complex(0.)
+    D = Complex(0.)
+    E = Complex(0.)
+    p = Complex(0.)
+
+    # Start iteration
+    for i in 3:n
+        b = delta2 + h2 * d
+        D = sqrt(b^2 - 4*f(p2)*d)
+        if abs(b - D) < abs(b+D)
+            E = b + D
+        else
+            E = b - D
+        end
+        h = -2* f(p2) / E
+        p = p2 + h
+        if abs(h)<tol
+            return p
+        end
+        println(i,'\t',p)
+        # Prepare for next iteration
+        p0 = p1
+        p1 = p2
+        p2 = p
+        h1 = p1 - p0
+        h2 = p2 - p1
+        delta1 = (f(p1) - f(p0))/h1
+        delta2 = (f(p2) - f(p1))/h2
+        d = (delta2 - delta1)/(h1 + h2)
+    end
+    print("Method failed after N0 iterations, N0 =", n)
     return p
 end
 
