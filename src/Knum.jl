@@ -23,7 +23,7 @@ function bisection(f,a,b,n=100,tol=1e-7)
     return p
 end
 
-function fixed_point(equa, p, N = 20, show = false)
+function fixed_point(g, p, N = 20, tol = 1e-7, show = false)
     #=
     Input:
     equa: The function you are going to compute
@@ -34,16 +34,21 @@ function fixed_point(equa, p, N = 20, show = false)
     Output:
     Approximation
     =#
+
     for i in 1:N+1
         if show
             println(i-1,'\t',p)
         end
-        p = equa(p)
+        if abs(p-g(p))<tol
+            return g(p)
+        end
+        p = g(p)
     end
+    println("Method Failed After", n, "iterations, the result is returned.")
     return p
 end
 
-function newton(equa, p, N = 20, tol = 1e-7, show = false)
+function newton(f, p, N = 20, tol = 1e-7, show = false)
     #=
     ---NOTICE---
     For Newton\'s method, your function need to enable 2 inputs,
@@ -67,11 +72,12 @@ function newton(equa, p, N = 20, tol = 1e-7, show = false)
             if show
                 println(i,'\t', p - equa(p)/dfp)
             end
-            return p - equa(p)/dfp
+            return p - f(p)/dfp
         else
-            p = p - equa(p)/dfp
+            p = p - f(p)/dfp
         end
     end
+    println("Method Failed After", n, "iterations, the result is returned.")
     return p
 end
 
@@ -165,7 +171,7 @@ function Aitkens_delta(g, p, n)
     return aitken_value
 end
 
-function Steffensens(g, p0, n=10, tol=1e-7)
+function Steffensens(g, p0, n=10, tol=1e-7,show = false)
     #=
     Input
     g - function
@@ -180,7 +186,9 @@ function Steffensens(g, p0, n=10, tol=1e-7)
         p1 = g(p0)
         p2 = g(p1)
         p = p0 - (p1-p0)^2/(p2-2p1+p0)
-        println(i,'\t',p)
+        if show
+            println(i,'\t',p)
+        end
         if abs(p - p0)<tol
             return p
         end
@@ -190,7 +198,7 @@ function Steffensens(g, p0, n=10, tol=1e-7)
     return p
 end
 
-function Muller(f, p0,p1,p2,n,tol)
+function Muller(f, p0,p1,p2,n,tol, show = false)
     #=
     Input:
     p0,p1,p2 - Initial three guesses
@@ -200,7 +208,7 @@ function Muller(f, p0,p1,p2,n,tol)
     Output:
     Roots
     =#
-    
+
     # First make every input Complex
     p0 = Complex(p0)
     p1 = Complex(p1)
@@ -232,7 +240,10 @@ function Muller(f, p0,p1,p2,n,tol)
         if abs(h)<tol
             return p
         end
-        println(i,'\t',p)
+        if show
+            println(i,'\t',p)
+        end
+
         # Prepare for next iteration
         p0 = p1
         p1 = p2
