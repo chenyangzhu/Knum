@@ -2,6 +2,8 @@ module Knum
 
 using ForwardDiff
 
+module Point
+
 function bisection(f,a,b,n=100,tol=1e-7)
     p = 0.
     FA = f(a)
@@ -258,4 +260,36 @@ function Muller(f, p0,p1,p2,n,tol, show = false)
     return p
 end
 
-end # module
+end # end module Point
+
+
+module Poly
+
+function Neville(f,x,xi::Array)
+    #=
+    Input:
+    f - function to value
+    x - the initial point
+    xi - Array of xs to evaluate
+
+    Output:
+    Q
+    =#
+    
+    n = length(xi)-1
+    Q = zeros(n+1,n+1)
+    for i in 1:n+1
+        Q[i,1] = f(xi[i])
+    end
+    for i in 1:n
+        for j in 1:i
+            Q[i+1,j+1] = ((x-xi[i-j+1])*Q[i+1,j] - (x-xi[i+1])*Q[i,j])/(xi[i+1]-xi[i-j+1])
+        end
+    end
+    return Q
+end
+
+end # module Poly
+
+
+end # module Knum

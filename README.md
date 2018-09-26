@@ -10,37 +10,32 @@ Pkg > add https://github.com/Klaus271/Knum/src/Knum.jl
 
 Available Algorithm
 
-- Bisection
-- Fixed Point
-- Newton's Method
-- Secant
-- False Position
-- Steffensen's Method
-- Aitken's Delta Method
+- Point
+  - Bisection
+  - Fixed Point
+  - Newton's Method
+  - Secant
+  - False Position
+  - Steffensen's Method
+  - Aitken's Delta Method
+- Polynomials
+  - Neville's Method
 
 # How to use it
 
 This package is still under development.
 
 ```julia
-julia> h(x::Vector) = 3^(-x[1])
-h (generic function with 1 method)
+julia> f(x) = (3.)^x
+f (generic function with 1 method)
 
-julia> h(x) = 3^(-x)
-h (generic function with 2 methods)
-
-julia> Knum.fixed_point(h,0.,10)
-0       0.0
-1       1.0
-2       0.3333333333333333
-3       0.6933612743506348
-4       0.46685562817398535
-5       0.598760657911438
-6       0.5179866461166681
-7       0.5660536061282596
-8       0.5369375702563746
-9       0.5543903636000769
-10      0.543861823031617
+julia> Knum.Poly.Neville(f,sqrt(3),[-2,-1,0,1,2])
+5×5 Array{Float64,2}:
+ 0.111111  0.0       0.0      0.0     0.0
+ 0.333333  0.940456  0.0      0.0     0.0
+ 1.0       2.1547    3.20627  0.0     0.0
+ 3.0       4.4641    5.3094   5.8226  0.0
+ 9.0       7.3923    7.0      6.849   6.78025
 ```
 
 # Acknowledgement
