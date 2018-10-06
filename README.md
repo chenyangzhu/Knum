@@ -5,7 +5,7 @@ Numerical Analysis for Julia
 To use this you can use the following line,
 
 ```julia
-Pkg > add https://github.com/Klaus271/Knum/src/Knum.jl
+Pkg > add https://github.com/Klaus271/Knum
 ```
 
 Available Algorithm
@@ -14,7 +14,7 @@ Available Algorithm
   - Bisection
   - Fixed Point
   - Newton's Method
-  - Secant
+  - Secant's Method
   - False Position
   - Steffensen's Method
   - Aitken's Delta Method
