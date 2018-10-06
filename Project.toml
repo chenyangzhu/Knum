@@ -1,6 +1,7 @@
-authors = ["AsahiK <klaus271@outlook.com>"]
 name = "Knum"
 uuid = "eb06dfb0-ba01-11e8-0a2b-3fa1859ea30c"
+authors = ["AsahiK <klaus271@outlook.com>"]
 version = "0.1.0"
 
 [deps]
+ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
