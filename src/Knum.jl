@@ -291,5 +291,43 @@ end
 
 end # module Poly
 
+module Diff
+
+    function SimpleDiff(f,x,h)
+        #=
+        Input:
+        f - function to evaluate
+        x - point to evaluate
+        h - step
+        Output:
+        Compute Foward/Backward Difference
+        =#
+        return (f(x+h)-f(x))/h
+    end
+
+    function ThreePointEnd(f,x,h)
+        return (1/(2*h))*(-3*f(x)+4*f(x+h)-f(x+2h))
+    end
+
+    function ThreePointMid(f,x,h)
+        return (1/(2*h))*(f(x+h)-f(x-h))
+    end
+
+    function FivePointMid(f,x,h)
+        return (1/(12*h))*(f(x-2*h)-8*f(x-h)+8*(x+h)-f(x+2*h))
+    end
+
+    function FivePointEnd(f,x,h)
+        return (1/(12*h))*(-25*f(x)+48*f(x-h)-36*f(x+2*h)+16f(x+3h)-3*f(x+4h))
+    end
+
+    function SecondMid(f,x,h)
+        #=
+        This function computes the second derivative using Midpoint method
+        =#
+        return 1/(h^2)*(f(x-h)-2*f(x)+f(x+h))
+    end
+    
+end # Module Diff
 
 end # module Knum

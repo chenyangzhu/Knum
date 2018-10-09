@@ -20,6 +20,9 @@ Available Algorithm
   - Aitken's Delta Method
 - Polynomials
   - Neville's Method
+- Differentiation
+  - three and five Mid/End point Method
+  - forward/backward differentiation
 
 # How to use it
 
