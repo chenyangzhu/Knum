@@ -327,7 +327,54 @@ module Diff
         =#
         return 1/(h^2)*(f(x-h)-2*f(x)+f(x+h))
     end
-    
 end # Module Diff
+
+module Integral
+
+    function Trapezoidal(f,a,b)
+        h = b-a
+        return h/2*(f(a)+f(b))
+    end
+
+    function Simpsons(f,a,b)
+        h=(b-a)/2
+        return h/3*(f(a)+4*f(a+h)+f(b))
+    end
+
+    function CSimpsons(f,a,b,n)
+        if n%2 == 0
+            h = (b-a)/n
+            odd = even = 0
+            for j in 1:(n/2-1)
+                odd += f(a+2*j*h)
+                even += f(a+(2*j-1)*h)
+            end
+            even += f(a+(n-1)*h)
+            return h/3*((f(a)+2*odd+4*even+f(b)))
+        else
+            Error("n should be even!")
+        end
+    end
+
+    function CTrapezoidal(f,a,b,n)
+        sum = 0
+        h = (b-a)/n
+        for j in 1:(n-1)
+            x = a+j*h
+            sum+=2*f(x)
+        end
+        return h/2*(sum+f(a)+f(b))
+    end
+
+    function CMidpoint(f,a,b,n)
+        h = (b-a)/(n+2)
+        sum = 0
+        for j in 0:n/2
+            sum += f(a+(2j+1)*h)
+        end
+        return sum*2*h
+    end
+    
+end # module Integral
 
 end # module Knum
