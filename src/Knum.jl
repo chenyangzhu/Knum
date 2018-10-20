@@ -394,6 +394,25 @@ module Integral
         return R
     end
 
+    function adapt(f,a,b,tol,pts,n,return_detail=false)
+        h = (b-a)/2
+        x = [a:(b-a)/4:b;]
+        fx = f.(x)
+        n1 = n+5
+        s = [1,0,4,0,1]' * fx * h/3
+        s1 =[1,4,2,4,1]' * fx * h/6
+        e1 = (s1-s)/15
+        if abs(e1)<tol*2/3
+            I = s1 + e1
+            pts1 = [pts...,b]
+        else
+            I1,pts2,n2 = adapt(f,a,0.5*(a+b),0.5*tol,pts,n1,true)
+            I2,pts1,n1 = adapt(f,0.5*(a+b),b,0.5*tol,pts2,n2,true)
+            I = I1+I2
+        end
+        return_detail && return I,pts1,n1
+        return I
+    end
 
 end # module Integral
 
