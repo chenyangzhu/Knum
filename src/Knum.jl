@@ -374,7 +374,27 @@ module Integral
         end
         return sum*2*h
     end
-    
+
+    function Romberg(f,a,b,n)
+        R = zeros(n,n)
+        h = b-a
+        R[1,1] = h/2*(f(a)+f(b))
+
+        for row_number in 2:n
+            sum = 0.
+            for k in 1:2^(row_number-2)
+                sum+=f(a+(k-0.5)*h)
+            end
+            R[row_number,1] = 0.5*(R[row_number-1,1]+h*sum)
+            for j in 2:row_number
+                R[row_number,j] = R[row_number,j-1]+(R[row_number,j-1]-R[row_number-1,j-1])/(4^(j-1)-1)
+            end
+            h = h/2
+        end
+        return R
+    end
+
+
 end # module Integral
 
 end # module Knum
