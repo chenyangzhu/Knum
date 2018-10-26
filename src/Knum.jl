@@ -394,7 +394,7 @@ module Integral
         return R
     end
 
-    function adapt(f,a,b,tol,pts,n,return_detail=false)
+    function Adapt(f,a,b,tol,pts,n,return_detail=false)
         h = (b-a)/2
         x = [a:(b-a)/4:b;]
         fx = f.(x)
@@ -412,6 +412,23 @@ module Integral
         end
         return_detail && return I,pts1,n1
         return I
+    end
+
+    function Gaussian(f,a,b,n)
+        if n == 2
+            tp = sqrt(3.)/3.
+            tn = -sqrt(3.)/3.
+            po = f((b+a)/2+tp*(b-a)/2)
+            ne = f((b+a)/2+tn*(b-a)/2)
+            return (po+ne)*(b-a)/2
+        end
+        if n == 5
+            coe = [0.9061798459 0.5384693101 0.0000000000 -0.5384693101 -0.9061798459]
+            c = [0.2369268850 0.4786286705 0.5688888889 0.4786286705 0.2369268850]
+            trans_coe = ((b-a) .* coe .+ (b+a)) ./ 2
+            ans = f.(trans_coe) * c' *(b-a)/2
+            return ans[1]
+        end
     end
 
 end # module Integral
