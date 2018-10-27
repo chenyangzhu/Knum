@@ -330,6 +330,17 @@ module Diff
 end # Module Diff
 
 module Integral
+    function Legendre_coef(n)
+        if n == 2
+            return [0.5773502692, -0.5773502692],[1.,1.]
+        elseif n == 3
+            return [0.7745966692,0.,-0.7745966692],[0.5555555556, 0.8888888889, 0.5555555556]
+        elseif n == 4
+            return [0.8611363116, 0.3399810436, -0.3399810436, -0.8611363116],[0.3478548451, 0.6521451549, 0.6521451549, 0.3478548451]
+        elseif n == 5
+            return [0.9061798459 0.5384693101 0.0000000000 -0.5384693101 -0.9061798459], [0.2369268850 0.4786286705 0.5688888889 0.4786286705 0.2369268850]
+        end
+    end
 
     function Trapezoidal(f,a,b)
         h = b-a
@@ -430,6 +441,63 @@ module Integral
             return ans[1]
         end
     end
+
+    function SimpsonsDouble(f::Function,a::Float64,b::Float64,c::Function,d::Function,m::Int64,n::Int64)
+        h = (b-a)/n
+        J1 = 0
+        J2 = 0
+        J3 = 0
+        for i in 0:n
+            x = a+i*h
+            HX = (d(x) - c(x))/m
+            K1 = f(x,c(x)) + f(x,d(x))
+            K2 = 0
+            K3 = 0
+            for j in 1:(m-1)
+                y = c(x)+j*HX
+                Q = f(x,y)
+                if j%2 == 0
+                    K2 = K2+Q
+                else
+                    K3 = K3 + Q
+                end
+            end
+            L = (K1 + 2*K2 + 4*K3)*HX/3
+            if i == 0 || i == n
+                J1 = J1 + L
+            elseif i % 2 == 0
+                J2 = J2 + L
+            else
+                J3 = J3 + L
+            end # end if
+        end # end for
+        J = h*(J1 + 2*J2 + 4*J3)/3
+        return J
+    end  # end SimpsonsDouble
+
+    function GaussianDouble(f::Function,a::Float64,b::Float64,c::Function,d::Function,m::Int64,n::Int64)
+        rm,cm = Legendre_coef(m)
+        rn,cn = Legendre_coef(n)
+        h1 = (b-a)/2
+        h2 = (b+a)/2
+        J = 0
+        for i in 1:m
+            JX = 0
+            x = h1 * rm[i] + h2
+            d1 = d(x)
+            c1 = c(x)
+            k1 = (d1 - c1)/2
+            k2 = (d1 + c1)/2
+            for j in 1:n
+                y = k1*rn[j]+k2
+                Q = f(x,y)
+                JX = JX + cn[j]*Q
+            end
+            J = J + cm[i]*k1*JX
+        end # end for i
+        J = h1*J
+        return J
+    end # end of GaussianDouble
 
 end # module Integral
 
