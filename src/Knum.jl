@@ -457,7 +457,7 @@ module Integral
                 y = c(x)+j*HX
                 Q = f(x,y)
                 if j%2 == 0
-                    K2 = K2+Q
+                    K2 = K2 + Q
                 else
                     K3 = K3 + Q
                 end
@@ -500,5 +500,88 @@ module Integral
     end # end of GaussianDouble
 
 end # module Integral
+
+module ODE
+
+    function Euler(f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        for i in 1:N
+            w = w+h*f(t,w)
+            t = t + h
+        end
+        return w
+    end # Euler
+
+    function mEuler(f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        for i in 1:N
+            w = w+h/2*(f(t,w)+f(t+h,w+h*f(t,w)))
+            t = t+h
+        end
+        return w
+    end # mEuler
+
+    function Midpoint(f,a,b,alpha,N)
+        w = alpha
+        h = (b-a)/N
+        t = a
+        @show (t,w)
+        for i in 1:N
+            w = w + h * f(t+h/2,w+h/2*f(t,w))
+            t = t + h
+            @show (t,w)
+        end
+        return w
+    end # Taylor
+
+    function mEuler(f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        @show (t,w)
+        for i in 1:N
+            w = w+h/2*(f(t,w)+f(t+h,w+h*f(t,w)))
+            t = t+h
+            @show (t,w)
+        end
+        return w
+    end # mEuler
+
+    function Heun(f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        for i in 1:N
+            w = w+h/4*(f(t,w)+3*f(t+2*h/3,w+2*h/3*f(t_h/3,w+h/3*f(t,w))))
+            t = t+h
+        end
+        return w
+    end # Heun
+
+    function RK4(f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        @show (t,w)
+
+        for i in 1:N
+            k1 = h*f(t,w)
+            k2 = h*f(t+h/2,w+1/2*k1)
+            k3 = h*f(t+h/2,w+1/2*k2)
+            k4 = h*f(t+h,w+k3)
+            w = w+(k1+2*k2+2*k3+k4)/6
+            t = t+h
+            @show (t,w)
+        end
+        return w
+    end # RK4
+
+
+end
+
 
 end # module Knum
