@@ -507,9 +507,11 @@ module ODE
         h = (b-a)/N
         t = a
         w = alpha
+        @show (t,w)
         for i in 1:N
             w = w+h*f(t,w)
             t = t + h
+            @show (t,w)
         end
         return w
     end # Euler
@@ -524,6 +526,36 @@ module ODE
         end
         return w
     end # mEuler
+
+    function Taylor2(f,df,a::Float64,b::Float64,alpha::Float64,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        @show (t,w)
+        for j = 1:N
+            w = w + h*f(t,w) + 0.5*h*h*df(t,w)
+            t = t+h
+            @show (t,w)
+        end
+        return w
+    end # Taylor2
+
+    function Taylor4(f,df,ddf,d3f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        h2 = h*h
+        h3 = h*h2
+        h4 = h2*h2
+        @show t,w
+        for j in 1:N
+            w = w + h*f(t,w) + 0.5*h2*df(t,w)+h3/6*ddf(t,w)+h4/24*d3f(t,w)
+            t = t+h
+            @show t,w
+        end
+        return w
+    end # End Taylor4
+
 
     function Midpoint(f,a,b,alpha,N)
         w = alpha
@@ -555,9 +587,11 @@ module ODE
         h = (b-a)/N
         t = a
         w = alpha
+        @show (t,w)
         for i in 1:N
-            w = w+h/4*(f(t,w)+3*f(t+2*h/3,w+2*h/3*f(t_h/3,w+h/3*f(t,w))))
+            w = w+h/4*(f(t,w)+3*f(t+2*h/3,w+2*h/3*f(t+h/3,w+h/3*f(t,w))))
             t = t+h
+            @show (t,w)
         end
         return w
     end # Heun
@@ -579,8 +613,7 @@ module ODE
         end
         return w
     end # RK4
-
-
+    
 end
 
 
