@@ -556,7 +556,6 @@ module ODE
         return w
     end # End Taylor4
 
-
     function Midpoint(f,a,b,alpha,N)
         w = alpha
         h = (b-a)/N
@@ -613,8 +612,51 @@ module ODE
         end
         return w
     end # RK4
-    
-end
 
+    function  AB3(f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = zeros(N+1)
+        w[1] = alpha
+        for i in 2:3
+            k1 = h*f(t,w[i-1])
+            k2 = h*f(t+h/2,w[i-1]+1/2*k1)
+            k3 = h*f(t+h/2,w[i-1]+1/2*k2)
+            k4 = h*f(t+h,w[i-1]+k3)
+            w[i] = w[i-1]+(k1+2*k2+2*k3+k4)/6
+            t = t+h
+        end
+        for i in 4:N+1
+            w[i] = w[i-1] + h/12 * (23*f(t,w[i-1])- 16*f(t-h,w[i-2])+ 5*f(t-2*h,w[i-3]))
+            t = t + h
+        end
+        return w
+    end # end AB3
+
+    function AM3(f,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = zeros(N+1)
+        w[1] = alpha
+        for i in 2:3
+            @show t,w
+            k1 = h*f(t,w[i-1])
+            k2 = h*f(t+h/2,w[i-1]+1/2*k1)
+            k3 = h*f(t+h/2,w[i-1]+1/2*k2)
+            k4 = h*f(t+h,w[i-1]+k3)
+            w[i] = w[i-1]+(k1+2*k2+2*k3+k4)/6
+            t = t + h
+        end
+        for i in 4:N+1
+            @show t,w
+            w[i] = w[i-1] + h/12 * (23*f(t,w[i-1])- 16*f(t-h,w[i-2])+ 5*f(t-2*h,w[i-3]))
+            w[i] = w[i-1] + h/24 * (9*f(t+h,w[i]) + 19*f(t,w[i-1]) - 5*f(t-h,w[i-2]) + f(t-2*h,w[i-3]))
+            t = t + h
+        end
+        @show t,w
+        return w
+    end # AM3
+
+end # End ODE
 
 end # module Knum
