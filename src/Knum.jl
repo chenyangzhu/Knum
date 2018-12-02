@@ -649,13 +649,76 @@ module ODE
         end
         for i in 4:N+1
             @show t,w
-            w[i] = w[i-1] + h/12 * (23*f(t,w[i-1])- 16*f(t-h,w[i-2])+ 5*f(t-2*h,w[i-3]))
+            w[i] = w[i-1] + h/12 * (23*f(t,w[i-1]) - 16*f(t-h,w[i-2])+ 5*f(t-2*h,w[i-3]))
             w[i] = w[i-1] + h/24 * (9*f(t+h,w[i]) + 19*f(t,w[i-1]) - 5*f(t-h,w[i-2]) + f(t-2*h,w[i-3]))
             t = t + h
         end
         @show t,w
         return w
     end # AM3
+
+    function rk4s(f,a,b,alpha,N)
+        #=
+        alpha is the initial values column vector
+        f is the array of functions we use in column vector, m functions
+        =#
+
+        d = length(alpha)
+        h = (b-a)/N
+        t = a .+ [0:N;] .* h
+        w = zeros(Float64,N+1,d)
+        w[1,:] = alpha
+        for j in 1:N
+            k1 = f(t[j],w[j,:])
+            k2 = f(t[j] .+ 0.5*h, w[j,:] .+ 0.5 * h .* k1)
+            k3 = f(t[j] .+ 0.5*h, w[j,:] .+ 0.5 * h .* k2)
+            k4 = f(t[j] .+     h, w[j,:] .+       h .* k3)
+            w[j+1,:] = w[j,:] .+ h/6 * (k1 + 2* k2 + 2*k3 + k4)
+            @show t[j], w[j+1,:]
+        end
+        return w,t
+    end #End Rk4s
+
+    function Trapezoidal(f,df,a,b,alpha,N,TOL,M = 1000)
+        #=
+        M is maximum number of iterations
+        =#
+        h = (b-a)/N
+        t = a
+        w = alpha
+
+        for i in 1:N
+            k1 = w+h/2*f(t,w)
+            w0 = k1
+            j = 1
+            FLAG = 0
+            while FLAG == 0
+                w = w0- (w0 - h/2*f(t+h,w0)-k1)/(1-h/2*df(t+h,w0))
+                if abs(w-w0) < TOL
+                    FLAG = 1
+                else
+                    j = j+1
+                    w0 = w
+                    if j > M
+                        println("The maximum number of iterations exceeded.")
+                        return t,w
+                    end # end if
+                end # end if
+            end # end while
+            t = a+i*h
+        end # end for
+        return t,w
+    end # end Trapezoidal
+
+    function BkwdEulerStiff(lambda,a,b,alpha,N)
+        h = (b-a)/N
+        t = a
+        w = alpha
+        for i in 1:N
+            w = w/(1-h*lambda)
+        end
+        return w
+    end
 
 end # End ODE
 
