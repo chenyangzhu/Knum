@@ -1,6 +1,7 @@
 module Knum
 
 using ForwardDiff
+using LinearAlgebra
 
 module Point
 
@@ -721,5 +722,62 @@ module ODE
     end
 
 end # End ODE
+
+module Matrix
+    using LinearAlgebra
+
+    function LU(A)
+        n,m = size(A)
+        L = Array{Float64}(I,n,n)
+        U = Array{Float64}(I,n,n)
+
+        # Step 1
+        U[1,1] = A[1,1]/L[1,1]
+        if L[1,1]*U[1,1] == 0
+            throw(error("Factorization impossible"))
+        end
+
+        # Step 2
+        for j in 2:n
+            U[1,j] = A[1,j]/L[1,1]
+            L[j,1] = A[j,1]/U[1,1]
+        end
+
+        # Step 3
+        for i in 2:(n-1)
+
+            # Step 4
+            temp = 0
+            for k in 1:(i-1)
+                temp = temp + L[i,k]*U[k,i]
+            end
+            U[i,i] = (A[i,i] - temp)/L[i,i]
+
+            L[1,1]*U[1,1] == 0 && throw(error("Factorization impossible"))
+
+            # Step 5
+            for j in (i+1):n
+                temp1 = 0
+                temp2 = 0
+                for k in 1:(i-1)
+                    temp1 = temp1 + L[i,k]*U[k,j]
+                    temp2 = temp2 + L[j,k] * U[k,i]
+                end # k
+                U[i,j] = 1/L[i,i]*(A[i,j] - temp1)
+                L[j,i] = 1/U[i,i]*(A[j,i] - temp2)
+            end # end for j
+        end # end for i
+
+        # Step 6
+        temp3 = 0
+        for k in 1:(n-1)
+            temp3 =temp3 + L[n,k] * U[k,n]
+        end
+        U[n,n] = (A[n,n] - temp3) / L[n,n]
+
+        return L,U
+    end #LU
+
+end # modeul Matrix
 
 end # module Knum
