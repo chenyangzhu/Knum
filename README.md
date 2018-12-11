@@ -5,7 +5,7 @@ Numerical Analysis for Julia
 To use this you can use the following line,
 
 ```julia
-Pkg > add https://github.com/Klaus271/Knum
+Pkg > add https://github.com/chenyangzhu/Knum
 ```
 
 Available Algorithm
