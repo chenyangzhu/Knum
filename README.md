@@ -24,17 +24,15 @@ Available Algorithm
   - three and five Mid/End point Method
   - forward/backward differentiation
 - Integration
- - Simpson's Method
- - Trapezoidal Method
+  - Simpson's Method
+  - Trapezoidal Method
 - ODE's
   - Euler's Method
   - AB/AM Explicit Methods
 - Matrix
- - LU Factorization
+  - LU Factorization
 
 # How to use it
-
-This package is still under development.
 
 ```julia
 julia> f(x) = (3.)^x
