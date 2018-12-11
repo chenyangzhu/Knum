@@ -10,7 +10,7 @@ Pkg > add https://github.com/Klaus271/Knum
 
 Available Algorithm
 
-- Point
+- Point Approximation
   - Bisection
   - Fixed Point
   - Newton's Method
@@ -23,6 +23,14 @@ Available Algorithm
 - Differentiation
   - three and five Mid/End point Method
   - forward/backward differentiation
+- Integration
+ - Simpson's Method
+ - Trapezoidal Method
+- ODE's
+  - Euler's Method
+  - AB/AM Explicit Methods
+- Matrix
+ - LU Factorization
 
 # How to use it
 
